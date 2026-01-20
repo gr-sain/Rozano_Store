@@ -1,15 +1,16 @@
 
-
 <section class="login-register section--lg">
     <div class="login-register__container container grid">
-        <div class="login">
-            <h3 class="section__title">Login</h3>
+        <div class="register">
+            <h3 class="section__title">Create an Account </h3>
 
             <form action="" class="form grid">
+                <input type="text" placeholder="Username" class="form__input">
                 <input type="email" placeholder="Your Email" class="form__input">
                 <input type="password" placeholder="Your Password" class="form__input">
+                <input type="password" placeholder="Confirm Password" class="form__input">
                 <div class="form__btn">
-                    <button class="btn">Login</button>
+                    <button class="btn">Sumbit & Register</button>
                 </div>
             </form>
         </div>

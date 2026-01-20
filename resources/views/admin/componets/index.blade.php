@@ -56,7 +56,7 @@
             <div class="content-card">
                 <div class="card-header">
                     <h2 class="card-title">Recent Orders</h2>
-                    <a href="{{ route('orders') }}" class="card-link">View All</a>
+                    <a href="{{ route('admin.orders') }}" class="card-link">View All</a>
                 </div>
                 <div class="table-responsive">
                     <table class="admin-table">
@@ -141,7 +141,7 @@
             <div class="content-card">
                 <div class="card-header">
                     <h2 class="card-title">Top Products</h2>
-                    <a href="{{ route('products') }}" class="card-link">View All</a>
+                    <a href="{{ route('admin.products') }}" class="card-link">View All</a>
                 </div>
                 <div class="products-list">
                     <div class="product-item">
@@ -210,15 +210,15 @@
                     <h2 class="card-title">Quick Actions</h2>
                 </div>
                 <div class="actions-grid">
-                    <a href="{{ route('products') }}" class="action-card">
+                    <a href="{{ route('admin.products') }}" class="action-card">
                         <i class="fa-solid fa-plus"></i>
                         <span>Add Product</span>
                     </a>
-                    <a href="{{ route('categories') }}" class="action-card">
+                    <a href="{{ route('admin.categories') }}" class="action-card">
                         <i class="fa-solid fa-tag"></i>
                         <span>Add Category</span>
                     </a>
-                    <a href="{{ route('coupons') }}" class="action-card">
+                    <a href="{{ route('admin.coupons') }}" class="action-card">
                         <i class="fa-solid fa-ticket"></i>
                         <span>Create Coupon</span>
                     </a>

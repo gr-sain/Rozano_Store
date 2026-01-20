@@ -14,7 +14,7 @@
             <span class="role-badge">Administrator</span>
         </div>
 
-        <a href="{{ route('settings') }}" class="edit-profile-btn">
+        <a href="{{ route('admin.settings') }}" class="edit-profile-btn">
             <i class="fa-solid fa-pen"></i> Edit Profile
         </a>
     </div>

@@ -34,7 +34,7 @@
                 </div>
 
                 <div class="profile-dropdown" id="profileDropdown">
-                    <a href="{{ route('profile') }}">
+                    <a href="{{ route('admin.profile') }}">
                         <i class="fa-solid fa-user"></i> My Profile
                     </a>
 

@@ -8,15 +8,15 @@
     </div>
     <nav class="sidebar-nav">
         <ul class="sidebar-menu">
-            <li class="sidebar-item"><a href="{{ route('home') }}" class="sidebar-link"><i class="fa-solid fa-chart-line"></i><span>Dashboard</span></a></li>
-            <li class="sidebar-item"><a href="{{ route('products') }}" class="sidebar-link"><i class="fa-solid fa-box"></i><span>Products</span></a></li>
-            <li class="sidebar-item"><a href="{{ route('orders') }}" class="sidebar-link"><i class="fa-solid fa-shopping-cart"></i><span>Orders</span></a></li>
-            <li class="sidebar-item"><a href="{{ route('customer') }}" class="sidebar-link"><i class="fa-solid fa-users"></i><span>Customers</span></a></li>
-            <li class="sidebar-item"><a href="{{ route('categories') }}" class="sidebar-link"><i class="fa-solid fa-tags"></i><span>Categories</span></a></li>
-            <li class="sidebar-item"><a href="{{ route('reviews') }}" class="sidebar-link"><i class="fa-solid fa-star"></i><span>Reviews</span></a></li>
-            <li class="sidebar-item"><a href="{{ route('coupons') }}" class="sidebar-link"><i class="fa-solid fa-ticket"></i><span>Coupons</span></a></li>
-            <li class="sidebar-item"><a href="{{ route('shippings') }}" class="sidebar-link"><i class="fa-solid fa-truck"></i><span>Shipping</span></a></li>
-            <li class="sidebar-item"><a href="{{ route('settings') }}" class="sidebar-link"><i class="fa-solid fa-gear"></i><span>Settings</span></a></li>
+            <li class="sidebar-item"><a href="{{ route('admin.home') }}" class="sidebar-link"><i class="fa-solid fa-chart-line"></i><span>Dashboard</span></a></li>
+            <li class="sidebar-item"><a href="{{ route('admin.products') }}" class="sidebar-link"><i class="fa-solid fa-box"></i><span>Products</span></a></li>
+            <li class="sidebar-item"><a href="{{ route('admin.orders') }}" class="sidebar-link"><i class="fa-solid fa-shopping-cart"></i><span>Orders</span></a></li>
+            <li class="sidebar-item"><a href="{{ route('admin.customers') }}" class="sidebar-link"><i class="fa-solid fa-users"></i><span>Customers</span></a></li>
+            <li class="sidebar-item"><a href="{{ route('admin.categories') }}" class="sidebar-link"><i class="fa-solid fa-tags"></i><span>Categories</span></a></li>
+            <li class="sidebar-item"><a href="{{ route('admin.reviews') }}" class="sidebar-link"><i class="fa-solid fa-star"></i><span>Reviews</span></a></li>
+            <li class="sidebar-item"><a href="{{ route('admin.coupons') }}" class="sidebar-link"><i class="fa-solid fa-ticket"></i><span>Coupons</span></a></li>
+            <li class="sidebar-item"><a href="{{ route('admin.shippings') }}" class="sidebar-link"><i class="fa-solid fa-truck"></i><span>Shipping</span></a></li>
+            <li class="sidebar-item"><a href="{{ route('admin.settings') }}" class="sidebar-link"><i class="fa-solid fa-gear"></i><span>Settings</span></a></li>
         </ul>
     </nav>
     <div class="sidebar-footer">

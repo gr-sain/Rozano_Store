@@ -9,70 +9,80 @@ Route::get('/', function () {
 
 Route::get('/cart', function () {
     return view('pages.cart');
-});
+})->name('cart');
 
 Route::get('/checkout', function () {
     return view('pages.checkout');
 })->name('checkout');
 
-Route::get('/comapre', function () {
+Route::get('/compare', function () {
     return view('pages.compare');
-});
+})->name('compare');
 
 Route::get('/shop', function () {
     return view('pages.shop');
-});
+})->name('shop');
 
 Route::get('/details', function () {
     return view('pages.details');
-});
-
+})->name('details');
 Route::get('/wishlist', function () {
     return view('pages.wishlist');
-});
+})->name('wishlist');
 
 Route::get('/login', function () {
     return view('pages.login-register');
-});
+})->name('login');
+
+Route::get('/register', function () {
+    return view('pages.register');
+})->name('register');
+
+
+Route::get('/myaccount', function () {
+    return view('pages.myaccount');
+})->name('myaccount');
+
+
 
 
 Route::get('/admin/index', function () {
     return view('admin.pages.index');
-})->name('home');
+})->name('admin.home');
 
 Route::get('/admin/products', function () {
     return view('admin.componets.products');
-})->name('products');
+})->name('admin.products');
 
 
 Route::get('/admin/orders', function () {
     return view('admin.componets.orders');
-})->name('orders');
+})->name('admin.orders');
 
 Route::get('/admin/customers', function () {
     return view('admin.componets.customers');
-})->name('customer');
-
+})->name('admin.customers');
 Route::get('/admin/categories', function () {
     return view('admin.componets.categories');
-})->name('categories');
+})->name('admin.categories');
 
 Route::get('/admin/reviews', function () {
     return view('admin.componets.reviews');
-})->name('reviews');
+})->name('admin.reviews');
 
 Route::get('/admin/coupon', function () {
     return view('admin.componets.coupon');
-})->name('coupons');
+})->name('admin.coupons');
 
 Route::get('/admin/shipping', function () {
     return view('admin.componets.shipping');
-})->name('shippings');
+})->name('admin.shippings');
+
 
 Route::get('/admin/settings', function () {
     return view('admin.componets.settings');
-})->name('settings');
+})->name('admin.settings');
 
 Route::get('/admin/profile', function () {
     return view('admin.profile');
-})->name('profile');
+})->name('admin.profile');
