@@ -22,7 +22,7 @@
                     Super Value Deals - Save more With Coupons
                 </p>
 
-                <a href="{{ route('login') }}" class="header__top-action">
+                <a href="{{ route('register') }}" class="header__top-action">
                     login & Register
                 </a>
             </div>
@@ -43,23 +43,23 @@
                 </div>
                 <ul class="nav__list">
                     <li class="nav__item">
-                        <a href="{{ route('user.home') }}" class="nav__link active-link">Home</a>
+                        <a href="{{ route('user.home') }}" class="nav__link {{ activeRoute('user.home') }}">Home</a>
                     </li>
 
                     <li class="nav__item">
-                        <a href="{{ route('shop') }}" class="nav__link">Shop</a>
+                        <a href="{{ route('shop') }}" class="nav__link {{ activeRoute('shop') }}">Shop</a>
                     </li>
 
                     <li class="nav__item">
-                        <a href="{{ route('myaccount') }}" class="nav__link">My Account</a>
+                        <a href="{{ route('myaccount') }}" class="nav__link {{ activeRoute('myaccount') }}">My Account</a>
                     </li>
 
                     <li class="nav__item">
-                        <a href="{{ route('compare') }}" class="nav__link">Compare</a>
+                        <a href="{{ route('compare') }}" class="nav__link {{ activeRoute('compare') }}">Compare</a>
                     </li>
 
                     <li class="nav__item">
-                        <a href="{{ route('login') }}" class="nav__link">Login</a>
+                        <a href="{{ route('login') }}" class="nav__link {{ activeRoute('login') }}">Login</a>
                     </li>
                 </ul>
                 <div class="header__search">
