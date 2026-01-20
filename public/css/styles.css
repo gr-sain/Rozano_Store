@@ -1437,6 +1437,10 @@
   align-items: center;
 }
 
+.js__bt{
+  justify-content: space-between;
+}
+
 .login,
 .register{
   border: 1px solid var(--border-color-alt);

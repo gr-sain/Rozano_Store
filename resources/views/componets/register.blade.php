@@ -9,8 +9,9 @@
                 <input type="email" placeholder="Your Email" class="form__input">
                 <input type="password" placeholder="Your Password" class="form__input">
                 <input type="password" placeholder="Confirm Password" class="form__input">
-                <div class="form__btn">
-                    <button class="btn">Sumbit & Register</button>
+                <div class="form__btn flex js__bt">
+                    <button class="btn">Register</button>
+                    <a class="btn" href="{{ route('login') }}">Continue Login</a>
                 </div>
             </form>
         </div>
