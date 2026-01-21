@@ -58,9 +58,13 @@
                         <a href="{{ route('compare') }}" class="nav__link {{ activeRoute('compare') }}">Compare</a>
                     </li>
 
+                    @guest
                     <li class="nav__item">
-                        <a href="{{ route('login') }}" class="nav__link {{ activeRoute('login') }}">Login</a>
+                        <a href="{{ route('login') }}" class="nav__link {{ activeRoute('login') }}">
+                            Login
+                        </a>
                     </li>
+                    @endguest
                 </ul>
                 <div class="header__search">
                     <input 

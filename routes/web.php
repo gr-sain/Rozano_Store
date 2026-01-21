@@ -1,88 +1,48 @@
 <?php
 
-use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
-
-Route::get('/', function () {
-    return view('pages.index');
-})->name('user.home');
-
-Route::get('/cart', function () {
-    return view('pages.cart');
-})->name('cart');
-
-Route::get('/checkout', function () {
-    return view('pages.checkout');
-})->name('checkout');
-
-Route::get('/compare', function () {
-    return view('pages.compare');
-})->name('compare');
-
-Route::get('/shop', function () {
-    return view('pages.shop');
-})->name('shop');
-
-Route::get('/details', function () {
-    return view('pages.details');
-})->name('details');
-Route::get('/wishlist', function () {
-    return view('pages.wishlist');
-})->name('wishlist');
-
-Route::get('/login', function () {
-    return view('pages.login-register');
-})->name('login');
-
-Route::get('/register', function () {
-    return view('pages.register');
-})->name('register');
-
-
-Route::get('/myaccount', function () {
-    return view('pages.myaccount');
-})->name('myaccount');
+use App\Http\Controllers\Auth\AuthController;
 
 
 
+Route::get('/', fn () => view('pages.index'))->name('user.home');
+Route::get('/shop', fn () => view('pages.shop'))->name('shop');
+Route::get('/details', fn () => view('pages.details'))->name('details');
+Route::get('/compare', fn () => view('pages.compare'))->name('compare');
 
-Route::get('/admin/index', function () {
-    return view('admin.pages.index');
-})->name('admin.home');
-
-Route::get('/admin/products', function () {
-    return view('admin.componets.products');
-})->name('admin.products');
-
-
-Route::get('/admin/orders', function () {
-    return view('admin.componets.orders');
-})->name('admin.orders');
-
-Route::get('/admin/customers', function () {
-    return view('admin.componets.customers');
-})->name('admin.customers');
-Route::get('/admin/categories', function () {
-    return view('admin.componets.categories');
-})->name('admin.categories');
-
-Route::get('/admin/reviews', function () {
-    return view('admin.componets.reviews');
-})->name('admin.reviews');
-
-Route::get('/admin/coupon', function () {
-    return view('admin.componets.coupon');
-})->name('admin.coupons');
-
-Route::get('/admin/shipping', function () {
-    return view('admin.componets.shipping');
-})->name('admin.shippings');
+Route::get('/login', fn () => view('pages.login'))->name('login');
+Route::get('/register', fn () => view('pages.register'))->name('register');
 
 
-Route::get('/admin/settings', function () {
-    return view('admin.componets.settings');
-})->name('admin.settings');
 
-Route::get('/admin/profile', function () {
-    return view('admin.profile');
-})->name('admin.profile');
+Route::post('/login', [AuthController::class, 'login'])->name('login.store');
+Route::post('/register', [AuthController::class, 'register'])->name('register.store');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout'); 
+
+
+
+Route::middleware(['auth', 'customer'])->group(function () {
+
+    Route::get('/cart', fn () => view('pages.cart'))->name('cart');
+    Route::get('/checkout', fn () => view('pages.checkout'))->name('checkout');
+    Route::get('/wishlist', fn () => view('pages.wishlist'))->name('wishlist');
+    Route::get('/myaccount', fn () => view('pages.myaccount'))->name('myaccount');
+
+});
+
+
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+
+    Route::get('/index', fn () => view('admin.pages.index'))->name('admin.home');
+
+    Route::get('/products', fn () => view('admin.componets.products'))->name('admin.products');
+    Route::get('/orders', fn () => view('admin.componets.orders'))->name('admin.orders');
+    Route::get('/customers', fn () => view('admin.componets.customers'))->name('admin.customers');
+    Route::get('/categories', fn () => view('admin.componets.categories'))->name('admin.categories');
+    Route::get('/reviews', fn () => view('admin.componets.reviews'))->name('admin.reviews');
+    Route::get('/coupon', fn () => view('admin.componets.coupon'))->name('admin.coupons');
+    Route::get('/shipping', fn () => view('admin.componets.shipping'))->name('admin.shippings');
+    Route::get('/settings', fn () => view('admin.componets.settings'))->name('admin.settings');
+    Route::get('/profile', fn () => view('admin.profile'))->name('admin.profile');
+
+});

@@ -4,8 +4,8 @@
 @section('content')
     @include('componets/breadcrumb', [
         'items' => [
-            ['label' => 'Login & Register']
+            ['label' => 'Login']
         ]
     ])
-    @include('componets.login-register')
+    @include('componets.login')
 @endsection

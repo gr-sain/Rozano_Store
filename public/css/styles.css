@@ -1622,6 +1622,15 @@
   font-size: var(--small-font-size);
 }
 
+.logout-btn {
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+}
+
+
 @media screen and (max-width: 1400px) {
   .container{
     max-width: 1140px;

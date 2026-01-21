@@ -21,21 +21,33 @@
                 <i class="fa-solid fa-user"></i> Change Password
             </p>
 
-            <p class="account__tab">
-                <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
-            </p>
+                <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit" class="account__tab logout-btn">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+                </button>
+            </form>
         </div>
 
-        <div class="tabs__content">
-            <div class="tab__content" content id="dashboard">
-                <h3 class="tab__header">Hello Gourav!</h3>
+            <div class="tab__content" id="dashboard">
+                <h3 class="tab__header">
+                    Hello {{ auth()->user()->name }}!
+                </h3>
 
                 <div class="tab__body">
                     <p class="tab__desciption">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque perferendis excepturi quod est temporibus?
+                        Welcome to your account dashboard.
                     </p>
+
+                    <ul class="account-info">
+                        <li><strong>Name:</strong> {{ auth()->user()->name }}</li>
+                        <li><strong>Email:</strong> {{ auth()->user()->email }}</li>
+                        <li><strong>Phone:</strong> {{ auth()->user()->phone }}</li>
+                        <li><strong>Joined:</strong> {{ auth()->user()->created_at->format('d M Y') }}</li>
+                    </ul>
                 </div>
             </div>
+
 
             <div class="tab__content" content id="orders">
                 <h3 class="tab__header">Your Orders</h3>
