@@ -22,10 +22,11 @@
                 <p class="header__alert-news">
                     Super Value Deals - Save more With Coupons
                 </p>
-
+                @guest
                 <a href="{{ route('register') }}" class="header__top-action">
                     login & Register
                 </a>
+                @endguest
             </div>
         </div>
         <nav class="nav container">
