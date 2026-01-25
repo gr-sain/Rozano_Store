@@ -43,6 +43,11 @@ class HomeBannerController extends Controller
             'status' => 'required'
         ]);
 
+
+        if ($request->status == 1) {
+            HomeBanner::where('status', 1)->update(['status' => 0]);
+        }
+
         $image = $request->file('image')->store('home', 'public');
 
         HomeBanner::create([
@@ -90,6 +95,12 @@ class HomeBannerController extends Controller
             'status' => 'required',
             'image' => 'nullable|image',
         ]);
+
+
+        if ($request->status == 1) {
+            HomeBanner::where('id', '!=', $homeBanner->id)
+                    ->update(['status' => 0]);
+        }
 
         if ($request->hasFile('image')) {
 
