@@ -407,19 +407,6 @@
     transition: 0.3s ease;
   }
 
-  /* .category__icon::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: 1.25rem;
-    border: 2px solid transparent;
-    transition: border 0.3s ease;
-  } */
-
-  /* .category__icon:hover::before {
-    border-color: var(--second-color);
-  } */
-
   .category__title{
     color: var(--text-color);
     font-size: var(--small-font-size);

@@ -1,7 +1,7 @@
 <section class="accounts section--lg">
     <div class="accounts__container container grid">
         <div class="account__tabs">
-            <p class="account__tab active-tab" data-target="#dashboard">
+            <p class="account__tab " data-target="#dashboard">
                 <i class="fa-solid fa-gauge"></i> Dashboard
             </p>
 

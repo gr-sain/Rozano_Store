@@ -42,7 +42,7 @@
                         <i class="fa-solid fa-lock"></i> Change Password
                     </a>
 
-                    <form action="" method="POST">
+                    <form action="{{ route('logout') }}" method="POST">
                         @csrf
                         <button type="submit">
                             <i class="fa-solid fa-right-from-bracket"></i> Logout

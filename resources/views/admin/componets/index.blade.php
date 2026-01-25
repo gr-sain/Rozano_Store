@@ -214,7 +214,7 @@
                         <i class="fa-solid fa-plus"></i>
                         <span>Add Product</span>
                     </a>
-                    <a href="{{ route('admin.categories') }}" class="action-card">
+                    <a href="{{ route('categories.index') }}" class="action-card">
                         <i class="fa-solid fa-tag"></i>
                         <span>Add Category</span>
                     </a>

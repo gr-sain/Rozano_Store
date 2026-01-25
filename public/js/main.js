@@ -32,8 +32,8 @@ var swiperCategories = new Swiper(".categories__container", {
   spaceBetween: 24,
   loop: true,
   navigation: {
-    nextEl: ".category-next", // Unique class
-    prevEl: ".category-prev", // Unique class
+    nextEl: ".category-next",
+    prevEl: ".category-prev",
   },
   breakpoints: {
     320: { slidesPerView: 1, spaceBetween: 24,},
@@ -66,24 +66,25 @@ var swiperProducts = new Swiper(".new__arrivals .swiper", {
 
 
 const tabs =  document.querySelectorAll('[data-target]'),
-    tabContents = document.querySelectorAll('[content]');
+    tabContents = document.querySelectorAll('.tab__content');
 
 tabs.forEach((tab) => {
     tab.addEventListener('click', () =>{
-        const target = document.querySelector(tab.dataset.target);
-        tabContents.forEach((tabContents) => {
-            tabContents.classList.remove('active-tab');
-        });
+      tabContents.forEach((tabContents) => {
+        tabContents.classList.remove('active-tab');
+      });
+      
+      
+      tabs.forEach((tab) => {
+        tab.classList.remove('active-tab');
+      });
 
-        target.classList.add('active-tab');
-
-        tabs.forEach((tab) => {
-            tab.classList.remove('active-tab');
-        });
-
-        tab.classList.add('active-tab');
+      const target = document.querySelector(tab.dataset.target);
+      target.classList.add('active-tab');
+      tab.classList.add('active-tab');
     });
 });
+tabs[0].click();
 
 
 // Works for multiple rows

@@ -129,21 +129,83 @@ window.printInvoice = function(orderId) {
 document.addEventListener('DOMContentLoaded', function() {
     const addCategoryBtn = document.getElementById('addCategoryBtn');
     if (addCategoryBtn) {
-        addCategoryBtn.addEventListener('click', function() {
+        addCategoryBtn.addEventListener('click', function () {
             openModal('categoryModal', 'categoryModalTitle', 'Add Category');
+
             const form = document.getElementById('categoryForm');
-            if (form) form.reset();
+            form.reset();
+            form.action = '/admin/categories';
+            document.getElementById('formMethod').value = 'POST';
         });
     }
 });
 
-window.editCategory = function(id) {
-    openModal('categoryModal', 'categoryModalTitle', 'Edit Category');
+window.editCategory = function (id) {
+    fetch(`/admin/categories/${id}/edit`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network error');
+            }
+            return response.json();
+        })
+        .then(data => {
+            openModal('categoryModal', 'categoryModalTitle', 'Edit Category');
+
+            const form = document.getElementById('categoryForm');
+
+            form.action = `/admin/categories/${id}`;
+
+            // hidden method field (PUT)
+            if (!document.getElementById('formMethod')) {
+                let methodInput = document.createElement('input');
+                methodInput.type = 'hidden';
+                methodInput.name = '_method';
+                methodInput.id = 'formMethod';
+                methodInput.value = 'PUT';
+                form.appendChild(methodInput);
+            } else {
+                document.getElementById('formMethod').value = 'PUT';
+            }
+
+            // fill values
+            form.querySelector('[name="name"]').value = data.name;
+            form.querySelector('[name="icon"]').value = data.icon;
+            form.querySelector('[name="status"]').value = data.status;
+        })
+        .catch(error => {
+            alert('Edit data load failed');
+            console.error(error);
+        });
 };
+
 
 window.closeCategoryModal = function() {
     closeModal('categoryModal');
 };
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const addBennerBtn = document.getElementById('addBennerBtn');
+    if (addBennerBtn) {
+        addBennerBtn.addEventListener('click', function () {
+            openModal('bennerModal', 'bennerModalTitle', 'Add Benner');
+
+            const form = document.getElementById('bennerForm');
+            form.reset();
+            form.action = '/admin/benner';
+            document.getElementById('formMethod').value = 'POST';
+        });
+    }
+});
+
+// window.editBenner = function(id) {
+//     openModal('bennerModal', 'bennerModalTitle', 'Edit Benner');
+// };
+
+window.closeBennerModal = function() {
+    closeModal('bennerModal');
+};
+
 
 document.addEventListener('DOMContentLoaded', function() {
     const addCouponBtn = document.getElementById('addCouponBtn');
@@ -271,3 +333,35 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+
+window.editBanner = function (id) {
+    fetch(`/admin/benner/${id}/edit`)
+        .then(res => res.json())
+        .then(data => {
+
+            openModal('bennerModal', 'bennerModalTitle', 'Edit Benner');
+
+            const form = document.getElementById('bennerForm');
+
+            form.action = `/admin/benner/${id}`;
+            document.getElementById('formMethod').value = 'PUT';
+
+            form.elements['subtitle'].value = data.subtitle ?? '';
+            form.elements['title'].value = data.title ?? '';
+            form.elements['highlight_title'].value = data.highlight_title ?? '';
+            form.elements['description'].value = data.description ?? '';
+            form.elements['button_text'].value = data.button_text ?? '';
+            form.elements['button_link'].value = data.button_link ?? '';
+
+            // Important fix
+            form.elements['status'].value = data.status?.toString() ?? '0';
+        })
+        .catch(err => {
+            console.error(err);
+            alert('Edit data load failed');
+        });
+};
+
+
+
