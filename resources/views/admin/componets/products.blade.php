@@ -51,8 +51,7 @@
                         <td><input type="checkbox" class="product-checkbox" value="{{ $product->id }}"></td>
                         <td>
                             <div class="product-item-wrapper">
-                                <img src="{{ asset('storage/product/'. $product->thumbnail) }}" alt="{{ $product->name }}" class="product-item-img">
-                                <div>
+                                    <img src="{{ asset('storage/' . $product->thumbnail) }}" alt="{{ $product->name }}" class="product-item-img">                                <div>
                                     <div class="product-item-name">{{ $product->name }}</div>
                                     <div class="product-item-desc">{{ Str::limit($product->description, 30) }}</div>
                                 </div>

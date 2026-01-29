@@ -17,6 +17,19 @@ use Intervention\Image\Drivers\Gd\Driver;
 
 class ProductController extends Controller
 {
+
+
+    public function __construct()
+    {
+        // Ensure public folders exist
+        if (!Storage::exists('public/products/thumbnails')) {
+            Storage::makeDirectory('public/products/thumbnails');
+        }
+        if (!Storage::exists('public/products/gallery')) {
+            Storage::makeDirectory('public/products/gallery');
+        }
+    }
+
     private function storeResizedImage($file, $folder, $width, $height = null)
     {
         $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
@@ -32,7 +45,8 @@ class ProductController extends Controller
             $img->scale(width: $width);
         }
         
-        Storage::put('public/' . $path, (string) $img->encode());
+        // FIX: Use disk('public') explicitly
+        Storage::disk('public')->put($path, (string) $img->encode());
         
         return $path;
     }
