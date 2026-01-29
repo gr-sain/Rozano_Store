@@ -1,0 +1,42 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('products', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('slug');
+            $table->string('sku')->unique();
+            $table->foreignId('category_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('brand_id')->constrained()->cascadeOnDelete();
+            $table->decimal('price',10,2);
+            $table->decimal('old_price',10,2)->nullable();
+            $table->string('thumbnail');        
+            $table->string('hover_thumbnail');  
+            $table->text('description')->nullable();
+            $table->integer('stock')->default(0);
+            $table->boolean('is_hot')->default(false);
+            $table->boolean('is_sale')->default(false);
+            $table->integer('discount_percent')->nullable();
+            $table->enum('status', ['in_stock', 'low_stock', 'out_stock'])->default('in_stock');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('products');
+    }
+};

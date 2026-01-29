@@ -131,14 +131,14 @@
             </div>
             <div style="margin-bottom: 1rem;">
                 <label for="status" class="form-label">Status</label>
-                <select name="status" id="status" class="form-control" style="padding: 0.5rem; width:100%">
+                <select name="status" id="status" class="form-control form-input">
                     <option value="">Select Status</option>
-                    <option value="1" style="color: blue; background: green;">True</option>
-                    <option value="0" style="color: black; background: red;">False</option>
+                    <option value="1">Active</option>
+                    <option value="0">Unactive</option>
                 </select>
             </div>
             <div class="form-actions">
-                <button type="button" class="btn-cancel" onclick="closeBennerModal()">Cancel</button>
+                <button type="button" class="modal-close btn-cancel" onclick="closeBennerModal()">Cancel</button>
                 <button type="submit" class="btn-submit">Save</button>
             </div>
         </form>

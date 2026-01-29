@@ -49,7 +49,7 @@
                     </li>
 
                     <li class="nav__item">
-                        <a href="{{ route('shop') }}" class="nav__link {{ activeRoute('shop') }}">Shop</a>
+                        <a href="{{ route('shop.index') }}" class="nav__link {{ activeRoute('shop') }}">Shop</a>
                     </li>
 
                     <li class="nav__item">

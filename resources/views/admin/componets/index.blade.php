@@ -141,7 +141,7 @@
             <div class="content-card">
                 <div class="card-header">
                     <h2 class="card-title">Top Products</h2>
-                    <a href="{{ route('admin.products') }}" class="card-link">View All</a>
+                    <a href="{{ route('products.index') }}" class="card-link">View All</a>
                 </div>
                 <div class="products-list">
                     <div class="product-item">
@@ -210,7 +210,7 @@
                     <h2 class="card-title">Quick Actions</h2>
                 </div>
                 <div class="actions-grid">
-                    <a href="{{ route('admin.products') }}" class="action-card">
+                    <a href="{{ route('products.index') }}" class="action-card">
                         <i class="fa-solid fa-plus"></i>
                         <span>Add Product</span>
                     </a>
@@ -329,7 +329,7 @@
                 </div>
 
                 <div class="form-actions">
-                    <button class="btn-cancel" onclick="exportReports('pdf')">
+                    <button class="modal-close btn-cancel" onclick="exportReports('pdf')">
                         <i class="fa-solid fa-file-pdf"></i> Export PDF
                     </button>
                     <button class="btn-submit" onclick="exportReports('excel')">

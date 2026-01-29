@@ -1,4 +1,4 @@
-@extends('admin.common.main')
+    @extends('admin.common.main')
 
 @section('header')
     <x-admin-header 
@@ -10,6 +10,7 @@
         button-id="addProductBtn"
     />
 @endsection
+
 @section('content')
     <div class="content-card">
         <div class="card-header">
@@ -45,90 +46,45 @@
                     </tr>
                 </thead>
                 <tbody id="productsTableBody">
-                    <tr>
-                        <td><input type="checkbox" class="product-checkbox"></td>
+                    @foreach ($products as $product)
+                        <tr>
+                        <td><input type="checkbox" class="product-checkbox" value="{{ $product->id }}"></td>
                         <td>
                             <div class="product-item-wrapper">
-                                <img src="{{ asset('img/product-2-1.jpg') }}" alt="Product" class="product-item-img">
+                                <img src="{{ asset('storage/product/'. $product->thumbnail) }}" alt="{{ $product->name }}" class="product-item-img">
                                 <div>
-                                    <div class="product-item-name">iPhone 14 Pro</div>
-                                    <div class="product-item-desc">Latest Apple smartphone</div>
+                                    <div class="product-item-name">{{ $product->name }}</div>
+                                    <div class="product-item-desc">{{ Str::limit($product->description, 30) }}</div>
                                 </div>
                             </div>
                         </td>
-                        <td>IPH14P-001</td>
-                        <td>Electronics</td>
-                        <td class="price-cell">$999.00</td>
-                        <td>45</td>
-                        <td><span class="status-badge status-completed">In Stock</span></td>
+                        <td>{{ $product->sku ?? 'N/A' }}</td>
+                        <td>{{ $product->category->name }}</td>
+                        <td class="price-cell">{{ number_format($product->price, 2) }}</td>
+                        <td>{{ $product->stock ?? 0 }}</td>
                         <td>
-                            <button class="action-btn" onclick="editProduct(1)" title="Edit"><i class="fa-solid fa-edit"></i></button>
-                            <button class="action-btn delete-btn" onclick="deleteProduct(1)" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                            @if ($product->stock > 20)
+                                <span class="status-badge status-completed">In Stock</span>
+                            @elseif ($product->stock > 0)
+                                <span class="status-badge status-pending">Low Stock</span>
+                            @else
+                                <span class="status-badge status-cancelled">Out of Stock</span>
+                            @endif
+                        </td>
+                        <td>
+                            <button class="action-btn" onclick="editProduct({{ $product->id }})" title="Edit">
+                                <i class="fa-solid fa-edit"></i>
+                            </button>
+                            <form action="{{ route('products.destroy', $product) }}" method="POST" style="display:inline;" onsubmit="return confirm('Delete this product?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="action-btn delete-btn" title="Delete">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </form>
                         </td>
                     </tr>
-                    <tr>
-                        <td><input type="checkbox" class="product-checkbox"></td>
-                        <td>
-                            <div class="product-item-wrapper">
-                                <img src="{{ asset('img/product-2-1.jpg') }}" alt="Product" class="product-item-img">
-                                <div>
-                                    <div class="product-item-name">Samsung Galaxy S23</div>
-                                    <div class="product-item-desc">Premium Android device</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>SAM23-001</td>
-                        <td>Electronics</td>
-                        <td class="price-cell">$899.00</td>
-                        <td>32</td>
-                        <td><span class="status-badge status-completed">In Stock</span></td>
-                        <td>
-                            <button class="action-btn" onclick="editProduct(2)" title="Edit"><i class="fa-solid fa-edit"></i></button>
-                            <button class="action-btn delete-btn" onclick="deleteProduct(2)" title="Delete"><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class="product-checkbox"></td>
-                        <td>
-                            <div class="product-item-wrapper">
-                                <img src="{{ asset('img/product-2-1.jpg') }}" alt="Product" class="product-item-img">
-                                <div>
-                                    <div class="product-item-name">MacBook Pro</div>
-                                    <div class="product-item-desc">Professional laptop</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>MBP-001</td>
-                        <td>Electronics</td>
-                        <td class="price-cell">$2,499.00</td>
-                        <td>8</td>
-                        <td><span class="status-badge status-pending">Low Stock</span></td>
-                        <td>
-                            <button class="action-btn" onclick="editProduct(3)" title="Edit"><i class="fa-solid fa-edit"></i></button>
-                            <button class="action-btn delete-btn" onclick="deleteProduct(3)" title="Delete"><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class="product-checkbox"></td>
-                        <td>
-                            <div class="product-item-wrapper">
-                                <img src="{{ asset('img/product-2-1.jpg') }}" alt="Product" class="product-item-img">
-                                <div>
-                                    <div class="product-item-name">AirPods Pro</div>
-                                    <div class="product-item-desc">Wireless earbuds</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>APP-001</td>
-                        <td>Electronics</td>
-                        <td class="price-cell">$249.00</td>
-                        <td>0</td>
-                        <td><span class="status-badge status-cancelled">Out of Stock</span></td>
-                        <td>
-                            <button class="action-btn" onclick="editProduct(4)" title="Edit"><i class="fa-solid fa-edit"></i></button>
-                            <button class="action-btn delete-btn" onclick="deleteProduct(4)" title="Delete"><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -153,65 +109,177 @@
                 <h2 class="modal-title" id="modalTitle">Add New Product</h2>
                 <button class="modal-close" onclick="closeModal()">&times;</button>
             </div>
-            <form id="productForm">
+            <form id="productForm" method="POST" action="{{ route('products.store') }}" enctype="multipart/form-data">
+                @csrf
+                <input type="hidden" name="_method" id="formMethod" value="POST">
+                <input type="hidden" name="product_id" id="productId">
                 <div class="form-grid-2">
                     <div>
                         <label class="form-label">Product Name *</label>
-                        <input type="text" class="form-input" required placeholder="Enter product name">
+                        <input type="text" name="name" id="productName" class="form-input" required placeholder="Enter product name">
                     </div>
                     <div>
                         <label class="form-label">SKU *</label>
-                        <input type="text" class="form-input" required placeholder="Enter SKU">
+                        <input type="text" name="sku" id="productSku" class="form-input" required placeholder="Enter SKU">
                     </div>
                 </div>
+
                 <div class="form-grid-2">
                     <div>
                         <label class="form-label">Category *</label>
-                        <select class="form-input" required>
+                        <select name="category_id" id="productCategory" class="form-input" required>
                             <option value="">Select Category</option>
-                            <option>Electronics</option>
-                            <option>Fashion</option>
-                            <option>Home & Living</option>
-                            <option>Sports</option>
+                            @foreach($category as $cat)
+                                <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                            @endforeach
                         </select>
                     </div>
+
                     <div>
-                        <label class="form-label">Brand</label>
-                        <input type="text" class="form-input" placeholder="Enter brand name">
+                        <label class="form-label">Brand *</label>
+                        <select name="brand_id" id="productBrand" class="form-input" required>
+                            <option value="">Select Brand</option>
+                            @foreach($brand as $br)
+                                <option value="{{ $br->id }}">{{ $br->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
+
+
                 <div class="form-grid-3">
                     <div>
                         <label class="form-label">Price *</label>
-                        <input type="number" class="form-input" required placeholder="0.00" step="0.01">
+                        <input type="number" name="price" id="productPrice" class="form-input" required placeholder="0.00" step="0.01">
+                    </div>
+                    <div>
+                        <label class="form-label">Old Price</label>
+                        <input type="number" name="old_price" id="productOldPrice" class="form-input" placeholder="0.00" step="0.01">
                     </div>
                     <div>
                         <label class="form-label">Stock Quantity *</label>
-                        <input type="number" class="form-input" required placeholder="0">
-                    </div>
-                    <div>
-                        <label class="form-label">Status</label>
-                        <select class="form-input">
-                            <option>In Stock</option>
-                            <option>Out of Stock</option>
-                            <option>Low Stock</option>
-                        </select>
+                        <input type="number" name="stock" id="productStock" class="form-input" required placeholder="0">
                     </div>
                 </div>
+
                 <div style="margin-bottom: 1rem;">
                     <label class="form-label">Description *</label>
-                    <textarea class="form-textarea" rows="4" required placeholder="Enter product description"></textarea>
+                    <textarea name="description" id="productDescription" class="form-textarea" rows="4" required placeholder="Enter product description"></textarea>
                 </div>
+
+                {{-- Badge Selection - Only one at a time --}}
+                <div style="margin-bottom: 1.5rem; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                    <label class="form-label" style="margin-bottom: 0.5rem; display: block;">Product Badge (Select One)</label>
+                    
+                    <div style="display: flex; gap: 2rem;">
+                        <div class="form-check">
+                            <input type="radio" name="badge_type" value="hot" class="form-check-input" id="badge_hot" onclick="toggleBadgeFields('hot')">
+                            <label class="form-check-label" for="badge_hot">
+                                🔥 Hot Product
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input type="radio" name="badge_type" value="sale" class="form-check-input" id="badge_sale" onclick="toggleBadgeFields('sale')">
+                            <label class="form-check-label" for="badge_sale">
+                                🏷️ On Sale
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input type="radio" name="badge_type" value="none" class="form-check-input" id="badge_none" onclick="toggleBadgeFields('none')" checked>
+                            <label class="form-check-label" for="badge_none">
+                                ❌ No Badge
+                            </label>
+                        </div>
+                    </div>
+
+                    {{-- Hidden inputs for backend --}}
+                    <input type="hidden" name="is_hot" id="is_hot_input" value="0">
+                    <input type="hidden" name="is_sale" id="is_sale_input" value="0">
+
+                    {{-- Discount field - only shows when "On Sale" is selected --}}
+                    <div id="discount_field" style="margin-top: 1rem; display: none;">
+                        <label class="form-label">Discount Percentage *</label>
+                        <input type="number" name="discount_percent" id="productDiscount" class="form-input" placeholder="e.g., 20" min="0" max="100">
+                        <small style="color: #666;">Enter discount percentage (0-100)</small>
+                    </div>
+                </div>
+
+
+                <div style="margin-bottom: 1.5rem; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                    <label class="form-label" style="margin-bottom: 0.5rem; display: block;">Product Type (Select One)</label>
+                    
+                    <div style="display: flex; gap: 2rem;">
+                        <div class="form-check">
+                            <input type="radio" name="product_type" value="featured" class="form-check-input" id="type_featured" onclick="toggleProductType('featured')">
+                            <label class="form-check-label" for="type_featured">
+                                ⭐ Featured
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input type="radio" name="product_type" value="popular" class="form-check-input" id="type_popular" onclick="toggleProductType('popular')">
+                            <label class="form-check-label" for="type_popular">
+                                🔥 Popular
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input type="radio" name="product_type" value="new" class="form-check-input" id="type_new" onclick="toggleProductType('new')">
+                            <label class="form-check-label" for="type_new">
+                                ✨ New Added
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input type="radio" name="product_type" value="none_type" class="form-check-input" id="type_none" onclick="toggleProductType('none_type')" checked>
+                            <label class="form-check-label" for="type_none">
+                                ❌ Regular
+                            </label>
+                        </div>
+                    </div>
+
+                    {{-- Hidden inputs for backend --}}
+                    <input type="hidden" name="is_featured" id="is_featured_input" value="0">
+                    <input type="hidden" name="is_popular" id="is_popular_input" value="0">
+                    <input type="hidden" name="is_new" id="is_new_input" value="0">
+                </div>
+
                 <div style="margin-bottom: 1rem;">
-                    <label class="form-label">Product Images</label>
-                    <input type="file" class="form-input" multiple accept="image/*">
-                    <div class="form-help-text">You can upload multiple images</div>
+                    <label class="form-label">Main Thumbnail *</label>
+                    <input type="file" name="thumbnail" id="productThumbnail" class="form-input" accept="image/*" required>
+                    <div id="thumbnailPreviewContainer" style="margin-top: 10px; display: none;">
+                        <img id="thumbnailPreview" style="max-width: 150px; border: 2px solid #ddd; border-radius: 8px; padding: 5px;">
+                        <p style="font-size: 12px; color: #666; margin-top: 5px;">Current Thumbnail</p>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 1rem;">
+                    <label class="form-label">Hover Thumbnail *</label>
+                    <input type="file" name="hover_thumbnail" id="productHoverThumbnail" class="form-input" accept="image/*" required>
+                    <div id="hoverThumbnailPreviewContainer" style="margin-top: 10px; display: none;">
+                        <img id="hoverThumbnailPreview" style="max-width: 150px; border: 2px solid #ddd; border-radius: 8px; padding: 5px;">
+                        <p style="font-size: 12px; color: #666; margin-top: 5px;">Current Hover Thumbnail</p>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 1rem;">
+                    <label class="form-label">Gallery Images</label>
+                    <input type="file" name="images[]" id="galleryImages" class="form-input" accept="image/*" multiple>
+                    
+                    <div id="existingGalleryContainer" style="margin-top: 15px; display: none;">
+                        <p style="font-weight: 600; margin-bottom: 10px;">Existing Gallery Images:</p>
+                        <div id="existingGalleryPreview" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
+                    </div>
+
+                    <div id="newGalleryPreview" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px;"></div>
                 </div>
                 <div class="form-actions">
-                    <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
+                    <button type="button" class="modal-close btn-cancel" onclick="closeModal()">Cancel</button>
                     <button type="submit" class="btn-submit">Save Product</button>
                 </div>
             </form>
         </div>
     </div>
-@endsection
+    @endsection

@@ -104,7 +104,7 @@
                     </div>
                 </div>
                 <div class="form-actions">
-                    <button type="button" class="btn-cancel" onclick="closeCouponModal()">Cancel</button>
+                    <button type="button" class="modal-close btn-cancel" onclick="closeCouponModal()">Cancel</button>
                     <button type="submit" class="btn-submit">Save</button>
                 </div>
             </form>

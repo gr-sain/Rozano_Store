@@ -22,7 +22,7 @@
 
                             <div class="category__icon"><i class="{{ $category->icon }}"></i></div>
                             <h3 class="category-name">{{ $category->name }}</h3>
-                            {{-- <p class="category-count">156 Products</p> --}}
+                            <p class="category-count">{{ $category->products_count }} Products</p>
                             {{-- Title --}}
                             <span class="{{ $category->status ? 'text-success' : 'text-danger' }}">
                                 {{ $category->status ? 'Active' : 'Inactive' }}
@@ -95,7 +95,7 @@
                 </select>
             </div>
             <div class="form-actions">
-                <button type="button" class="btn-cancel" onclick="closeCategoryModal()">Cancel</button>
+                <button type="button" class="modal-close btn-cancel" onclick="closeCategoryModal()">Cancel</button>
                 <button type="submit" class="btn-submit">Save</button>
             </div>
         </form>

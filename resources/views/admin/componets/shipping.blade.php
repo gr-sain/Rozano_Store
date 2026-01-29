@@ -188,7 +188,7 @@
                     </label>
                 </div>
                 <div class="form-actions">
-                    <button type="button" class="btn-cancel" onclick="closeShippingModal()">Cancel</button>
+                    <button type="button" class="modal-close btn-cancel" onclick="closeShippingModal()">Cancel</button>
                     <button type="submit" class="btn-submit">Save</button>
                 </div>
             </form>

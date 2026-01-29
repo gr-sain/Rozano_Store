@@ -72,6 +72,7 @@ function closeModal(modalId) {
     }
 }
 
+
 document.addEventListener('click', function(event) {
     if (event.target.classList.contains('modal')) {
         event.target.classList.remove('show');
@@ -87,32 +88,339 @@ document.addEventListener('click', function(event) {
     }
 });
 
+function previewNewGalleryImages(input) {
+    const previewContainer = document.getElementById('newGalleryPreview');
+    previewContainer.innerHTML = ''; // Clear previous previews
+    
+    if (input.files) {
+        Array.from(input.files).forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imgWrapper = document.createElement('div');
+                imgWrapper.style.cssText = 'position: relative; display: inline-block;';
+                
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.cssText = 'width: 100px; height: 100px; object-fit: cover; border: 2px solid #ddd; border-radius: 8px;';
+                
+                const removeBtn = document.createElement('button');
+                removeBtn.innerHTML = '&times;';
+                removeBtn.type = 'button';
+                removeBtn.style.cssText = 'position: absolute; top: -5px; right: -5px; background: red; color: white; border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer; font-size: 18px; line-height: 1;';
+                removeBtn.onclick = function() {
+                    imgWrapper.remove();
+                    // Remove file from input (complex, so just hide the preview)
+                };
+                
+                imgWrapper.appendChild(img);
+                imgWrapper.appendChild(removeBtn);
+                previewContainer.appendChild(imgWrapper);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+}
+
+// Preview thumbnail on change
+function previewThumbnail(input, previewId, containerId) {
+    const preview = document.getElementById(previewId);
+    const container = document.getElementById(containerId);
+    
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            container.style.display = 'block';
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+// DOMContentLoaded
 document.addEventListener('DOMContentLoaded', function() {
-    const addProductBtn = document.getElementById('addProductBtn');
-    if (addProductBtn) {
-        addProductBtn.addEventListener('click', function() {
-            openModal('productModal', 'modalTitle', 'Add New Product');
-            const form = document.getElementById('productForm');
-            if (form) form.reset();
+    // Gallery images preview
+    const galleryInput = document.getElementById('galleryImages');
+    if (galleryInput) {
+        galleryInput.addEventListener('change', function() {
+            previewNewGalleryImages(this);
         });
     }
 
-    const selectAll = document.getElementById('selectAll');
-    if (selectAll) {
-        selectAll.addEventListener('change', function() {
-            const checkboxes = document.querySelectorAll('.product-checkbox');
-            checkboxes.forEach(cb => cb.checked = this.checked);
+    
+    // Thumbnail preview on change
+    const thumbnailInput = document.getElementById('productThumbnail');
+    if (thumbnailInput) {
+        thumbnailInput.addEventListener('change', function() {
+            previewThumbnail(this, 'thumbnailPreview', 'thumbnailPreviewContainer');
+        });
+    }
+    
+    // Hover thumbnail preview on change
+    const hoverThumbnailInput = document.getElementById('productHoverThumbnail');
+    if (hoverThumbnailInput) {
+        hoverThumbnailInput.addEventListener('change', function() {
+            previewThumbnail(this, 'hoverThumbnailPreview', 'hoverThumbnailPreviewContainer');
         });
     }
 });
 
-window.editProduct = function(id) {
-    openModal('productModal', 'modalTitle', 'Edit Product');
+window.toggleProductType = function(type) {
+    const isFeaturedInput = document.getElementById('is_featured_input');
+    const isPopularInput = document.getElementById('is_popular_input');
+    const isNewInput = document.getElementById('is_new_input');
+
+    // Reset all
+    isFeaturedInput.value = '0';
+    isPopularInput.value = '0';
+    isNewInput.value = '0';
+
+    if (type === 'featured') {
+        isFeaturedInput.value = '1';
+    } else if (type === 'popular') {
+        isPopularInput.value = '1';
+    } else if (type === 'new') {
+        isNewInput.value = '1';
+    }
 };
 
+    // Add Product Button
+const addProductBtn = document.getElementById('addProductBtn');
+if (addProductBtn) {
+    addProductBtn.addEventListener('click', function() {
+        // Reset form for new product
+        const modalTitle = document.getElementById('modalTitle');
+        const formMethod = document.getElementById('formMethod');
+        const productForm = document.getElementById('productForm');
+
+        document.getElementById('type_none').checked = true;
+        toggleProductType('none_type');
+        
+        if (modalTitle) modalTitle.textContent = 'Add New Product';
+        if (formMethod) formMethod.value = 'POST';
+        if (productForm) {
+            productForm.action = '/admin/products';
+            productForm.reset();
+        }
+        
+        // Hide all preview containers
+        document.getElementById('thumbnailPreviewContainer').style.display = 'none';
+        document.getElementById('hoverThumbnailPreviewContainer').style.display = 'none';
+        document.getElementById('existingGalleryContainer').style.display = 'none';
+        document.getElementById('newGalleryPreview').innerHTML = '';
+        
+        // Reset badge fields
+        document.getElementById('badge_none').checked = true;
+        toggleBadgeFields('none');
+        
+        // Make thumbnails required
+        const productThumbnail = document.getElementById('productThumbnail');
+        const productHoverThumbnail = document.getElementById('productHoverThumbnail');
+        if (productThumbnail) productThumbnail.setAttribute('required', 'required');
+        if (productHoverThumbnail) productHoverThumbnail.setAttribute('required', 'required');
+        
+        openModal('productModal');
+    });
+}
+
+// Select All Checkbox
+const selectAll = document.getElementById('selectAll');
+if (selectAll) {
+    selectAll.addEventListener('change', function() {
+        const checkboxes = document.querySelectorAll('.product-checkbox');
+        checkboxes.forEach(cb => cb.checked = this.checked);
+    });
+}
+
+// Badge selection logic
+window.toggleBadgeFields = function(type) {
+    const discountField = document.getElementById('discount_field');
+    const isHotInput = document.getElementById('is_hot_input');
+    const isSaleInput = document.getElementById('is_sale_input');
+    const discountInput = document.getElementById('productDiscount');
+
+    // Reset all
+    isHotInput.value = '0';
+    isSaleInput.value = '0';
+    discountField.style.display = 'none';
+    if (discountInput) {
+        discountInput.required = false;
+        discountInput.value = '';
+    }
+
+    if (type === 'hot') {
+        isHotInput.value = '1';
+    } else if (type === 'sale') {
+        isSaleInput.value = '1';
+        discountField.style.display = 'block';
+        if (discountInput) discountInput.required = true;
+    }
+};
+
+// Edit Product Function
+window.editProduct = function(id) {
+    fetch(`/admin/products/${id}/edit`)
+        .then(res => {
+            if (!res.ok) throw new Error('Network response was not ok');
+            return res.json();
+        })
+        .then(product => {
+
+            if (product.is_featured == 1 || product.is_featured === true) {
+                document.getElementById('type_featured').checked = true;
+                toggleProductType('featured');
+            } else if (product.is_popular == 1 || product.is_popular === true) {
+                document.getElementById('type_popular').checked = true;
+                toggleProductType('popular');
+            } else if (product.is_new == 1 || product.is_new === true) {
+                document.getElementById('type_new').checked = true;
+                toggleProductType('new');
+            } else {
+                document.getElementById('type_none').checked = true;
+                toggleProductType('none_type');
+            }
+            
+            // Update modal title
+            const modalTitle = document.getElementById('modalTitle');
+            if (modalTitle) modalTitle.textContent = 'Edit Product';
+            
+            // Update form method and action
+            const formMethod = document.getElementById('formMethod');
+            if (formMethod) formMethod.value = 'PUT';
+            
+            const productForm = document.getElementById('productForm');
+            if (productForm) productForm.action = `/admin/products/${product.id}`;
+            
+            const productId = document.getElementById('productId');
+            if (productId) productId.value = product.id;
+            
+            // Fill form fields
+            const fields = {
+                'productName': product.name,
+                'productSku': product.sku,
+                'productCategory': product.category_id,
+                'productBrand': product.brand_id,
+                'productPrice': product.price,
+                'productOldPrice': product.old_price,
+                'productStock': product.stock,
+                'productDescription': product.description
+            };
+            
+            Object.keys(fields).forEach(fieldId => {
+                const element = document.getElementById(fieldId);
+                if (element) element.value = fields[fieldId] || '';
+            });
+            
+            // Set badge radio buttons based on product data
+            if (product.is_hot == 1 || product.is_hot === true) {
+                document.getElementById('badge_hot').checked = true;
+                toggleBadgeFields('hot');
+            } else if (product.is_sale == 1 || product.is_sale === true) {
+                document.getElementById('badge_sale').checked = true;
+                toggleBadgeFields('sale');
+                const discountInput = document.getElementById('productDiscount');
+                if (discountInput) discountInput.value = product.discount_percent || '';
+            } else {
+                document.getElementById('badge_none').checked = true;
+                toggleBadgeFields('none');
+            }
+            
+            // Handle main thumbnail preview
+            if (product.thumbnail) {
+                const preview = document.getElementById('thumbnailPreview');
+                const container = document.getElementById('thumbnailPreviewContainer');
+                if (preview && container) {
+                    preview.src = `/storage/${product.thumbnail}`;
+                    container.style.display = 'block';
+                }
+            }
+            
+            // Handle hover thumbnail preview
+            if (product.hover_thumbnail) {
+                const hoverPreview = document.getElementById('hoverThumbnailPreview');
+                const hoverContainer = document.getElementById('hoverThumbnailPreviewContainer');
+                if (hoverPreview && hoverContainer) {
+                    hoverPreview.src = `/storage/${product.hover_thumbnail}`;
+                    hoverContainer.style.display = 'block';
+                }
+            }
+            
+            // Handle existing gallery images
+            if (product.images && product.images.length > 0) {
+                const existingGalleryContainer = document.getElementById('existingGalleryContainer');
+                const existingGalleryPreview = document.getElementById('existingGalleryPreview');
+                
+                if (existingGalleryContainer && existingGalleryPreview) {
+                    existingGalleryPreview.innerHTML = '';
+                    
+                    product.images.forEach((image, index) => {
+                        const imgWrapper = document.createElement('div');
+                        imgWrapper.style.cssText = 'position: relative; display: inline-block;';
+                        
+                        const img = document.createElement('img');
+                        img.src = `/storage/${image.image}`;
+                        img.style.cssText = 'width: 100px; height: 100px; object-fit: cover; border: 2px solid #4CAF50; border-radius: 8px;';
+                        img.title = 'Existing image';
+                        
+                        const deleteBtn = document.createElement('button');
+                        deleteBtn.innerHTML = '&times;';
+                        deleteBtn.type = 'button';
+                        deleteBtn.style.cssText = 'position: absolute; top: -5px; right: -5px; background: red; color: white; border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer; font-size: 18px; line-height: 1;';
+                        deleteBtn.onclick = function () {
+                            if (confirm('Delete this image?')) {
+                                fetch(`/admin/products/images/${image.id}`, {
+                                    method: 'DELETE',
+                                    headers: {
+                                        'X-CSRF-TOKEN': document
+                                            .querySelector('meta[name="csrf-token"]')
+                                            ?.getAttribute('content'),
+                                        'Accept': 'application/json'
+                                    }
+                                })
+                                .then(res => {
+                                    if (!res.ok) throw new Error('Delete failed');
+                                    return res.json();
+                                })
+                                .then(data => {
+                                    if (data.success) {
+                                        imgWrapper.remove();
+                                    }
+                                })
+                                .catch(err => console.error(err));
+                            }
+                        };
+                        
+                        imgWrapper.appendChild(img);
+                        imgWrapper.appendChild(deleteBtn);
+                        existingGalleryPreview.appendChild(imgWrapper);
+                    });
+                    
+                    existingGalleryContainer.style.display = 'block';
+                }
+            }
+            
+            // Clear new gallery preview
+            document.getElementById('newGalleryPreview').innerHTML = '';
+            
+            // Make file uploads optional for editing
+            const productThumbnail = document.getElementById('productThumbnail');
+            const productHoverThumbnail = document.getElementById('productHoverThumbnail');
+            if (productThumbnail) productThumbnail.removeAttribute('required');
+            if (productHoverThumbnail) productHoverThumbnail.removeAttribute('required');
+            
+            // Open modal
+            openModal('productModal');
+        })
+        .catch(error => {
+            console.error('Error fetching product:', error);
+            alert('Error loading product data: ' + error.message);
+        });
+};
+
+// Close modal
 window.closeModal = function() {
     closeModal('productModal');
 };
+
 
 window.viewOrder = function(orderId) {
     openModal('orderModal');
@@ -225,6 +533,49 @@ window.editCoupon = function(id) {
 window.closeCouponModal = function() {
     closeModal('couponModal');
 };
+
+
+
+document.getElementById('addBrandBtn').addEventListener('click', function() {
+    document.getElementById('brandModalTitle').textContent = 'Create Brand';
+    document.getElementById('brandForm').action = "/admin/brands";
+    document.getElementById('formMethod').value = 'POST';
+    document.getElementById('brandForm').reset();
+    document.getElementById('brandModal').style.display = 'flex';
+});
+
+// Edit brand function
+function editBrand(id) {
+    fetch(`/admin/brands/${id}/edit`)
+        .then(response => response.json())
+        .then(data => {
+            
+            document.getElementById('brandModalTitle').textContent = 'Edit Brand';
+            document.getElementById('brandForm').action = `/admin/brands/${id}`;
+            document.getElementById('formMethod').value = 'PUT';
+            document.getElementById('brandId').value = data.id;
+            document.getElementById('brandName').value = data.name;
+            document.getElementById('brandIcon').value = data.icon;
+            document.getElementById('brandStatus').value = data.status;
+            document.getElementById('brandModal').style.display = 'flex';
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+// Close modal
+function closeBrandModal() {
+    document.getElementById('brandModal').style.display = 'none';
+    document.getElementById('brandForm').reset();
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const modal = document.getElementById('brandModal');
+    if (event.target == modal) {
+        closeBrandModal();
+    }
+}
+
 
 window.toggleShippingFields = function() {
     const shippingType = document.getElementById('shippingType');
@@ -362,6 +713,4 @@ window.editBanner = function (id) {
             alert('Edit data load failed');
         });
 };
-
-
 
