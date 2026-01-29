@@ -11,16 +11,26 @@ class ProductImageController extends Controller
 {
     public function destroy($id)
     {
-        $image = ProductImage::findOrFail($id);
-
-        if ($image->image && Storage::exists('public/' . $image->image)) {
-            Storage::delete('public/' . $image->image);
+        try {
+            $image = ProductImage::findOrFail($id);
+            
+            // Delete the file from storage
+            if (Storage::exists('public/' . $image->image)) {
+                Storage::delete('public/' . $image->image);
+            }
+            
+            // Delete the database record
+            $image->delete();
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Image deleted successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete image: ' . $e->getMessage()
+            ], 500);
         }
-
-        $image->delete();
-
-        return response()->json([
-            'success' => true
-        ]);
     }
 }

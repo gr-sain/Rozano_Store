@@ -302,4 +302,27 @@ class ProductController extends Controller
 
         return redirect()->back()->with('success', 'Product deleted successfully!');
     }
+
+    public function deleteImage($id)
+    {
+        try {
+            $image = ProductImage::findOrFail($id);
+            
+            if (Storage::exists('public/' . $image->image)) {
+                Storage::delete('public/' . $image->image);
+            }
+            
+            $image->delete();
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Image deleted successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete image'
+            ], 500);
+        }
+    }
 }

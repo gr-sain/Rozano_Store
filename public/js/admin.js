@@ -366,26 +366,36 @@ window.editProduct = function(id) {
                         deleteBtn.type = 'button';
                         deleteBtn.style.cssText = 'position: absolute; top: -5px; right: -5px; background: red; color: white; border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer; font-size: 18px; line-height: 1;';
                         deleteBtn.onclick = function () {
+                            
                             if (confirm('Delete this image?')) {
-                                fetch(`/admin/products/images/${image.id}`, {
+                                const url = `/admin/products/images/${image.id}`;
+                                
+                                fetch(url, {
                                     method: 'DELETE',
                                     headers: {
-                                        'X-CSRF-TOKEN': document
-                                            .querySelector('meta[name="csrf-token"]')
-                                            ?.getAttribute('content'),
-                                        'Accept': 'application/json'
+                                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                                        'Accept': 'application/json',
+                                        'Content-Type': 'application/json'
                                     }
                                 })
                                 .then(res => {
-                                    if (!res.ok) throw new Error('Delete failed');
+                                    console.log('Response status:', res.status); // Debug line
+                                    if (!res.ok) {
+                                        throw new Error(`Delete failed with status: ${res.status}`);
+                                    }
                                     return res.json();
                                 })
                                 .then(data => {
+                                    console.log('Response data:', data); // Debug line
                                     if (data.success) {
                                         imgWrapper.remove();
+                                        alert('Image deleted successfully!');
                                     }
                                 })
-                                .catch(err => console.error(err));
+                                .catch(err => {
+                                    console.error('Error:', err);
+                                    alert('Failed to delete image');
+                                });
                             }
                         };
                         
